@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turno de Meseros</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#222;
+    color:white;
+    width:100vw;
+    height:100vh;
+}
+
+#configuracion{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+}
+
+input{
+    width:300px;
+    padding:12px;
+    font-size:20px;
+    border:none;
+    border-radius:8px;
+}
+
+button{
+    padding:12px 35px;
+    font-size:20px;
+    cursor:pointer;
+    border:none;
+    border-radius:8px;
+}
+
+#contenedorNombres{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+#pantalla{
+    display:none;
+    width:100%;
+    height:100%;
+    justify-content:center;
+    align-items:center;
+    font-size:90px;
+    font-weight:bold;
+    cursor:pointer;
+    user-select:none;
+}
+
+</style>
+
+</head>
+<body>
+
+<div id="configuracion">
+
+    <h1>Turno de Meseros</h1>
+
+    <input
+        type="number"
+        id="cantidad"
+        min="1"
+        placeholder="Número de meseros">
+
+    <button onclick="crearCampos()">
+        Continuar
+    </button>
+
+    <div id="contenedorNombres"></div>
+
+</div>
+
+<div id="pantalla"></div>
+
+<script>
+
+let nombres=[];
+let indice=0;
+
+function crearCampos(){
+
+    const cantidad=parseInt(document.getElementById("cantidad").value);
+
+    if(isNaN(cantidad) || cantidad<=0){
+        alert("Ingresa un número válido.");
+        return;
+    }
+
+    const contenedor=document.getElementById("contenedorNombres");
+    contenedor.innerHTML="";
+
+    for(let i=0;i<cantidad;i++){
+
+        const input=document.createElement("input");
+
+        input.type="text";
+        input.placeholder="Nombre del mesero "+(i+1);
+
+        contenedor.appendChild(input);
+
+    }
+
+    const boton=document.createElement("button");
+
+    boton.textContent="Iniciar";
+
+    boton.onclick=iniciar;
+
+    contenedor.appendChild(boton);
+
+}
+
+function iniciar(){
+
+    nombres=[];
+
+    const inputs=document.querySelectorAll("#contenedorNombres input");
+
+    for(let input of inputs){
+
+        if(input.value.trim()==""){
+            alert("Todos los nombres son obligatorios.");
+            return;
+        }
+
+        nombres.push(input.value);
+
+    }
+
+    document.getElementById("configuracion").style.display="none";
+
+    const pantalla=document.getElementById("pantalla");
+
+    pantalla.style.display="flex";
+
+    pantalla.textContent=nombres[0];
+
+}
+
+document.getElementById("pantalla").addEventListener("click",function(){
+
+    indice=(indice+1)%nombres.length;
+
+    this.textContent=nombres[indice];
+
+});
+
+</script>
+
+</body>
+</html>
